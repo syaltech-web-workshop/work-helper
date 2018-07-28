@@ -5,37 +5,37 @@ if(empty($argv[1])){
 	showAvailableCommands();
 	exit();
 }
+$commands = [
+	'start'  => [
+		'description' => 'starts the work',
+		'runs' => 'startWork'
+	],
+	'stop' => [
+		'description' => 'stops the work',
+		'runs' => 'stopWork'
+	],
+	'stats' => [
+		'description' => 'show the stats',
+		'runs' => 'stats'
+	],
+	'clear' => [
+		'description' => 'clears the current work',
+		'runs' => 'clear'
+	]
+];
 
 $command = $argv[1];
 $data = [];
 
-if($command === 'start'){
-	startWork();
-}else if($command ===  'stop'){
-	stopWork();
-}else if($command ===  'stats'){
-	stats();
-}else if($command ===  'clear'){
-	clear();
-}else {
+if(empty($commands[$command])){
 	println("Unsupported Command");
 	showAvailableCommands();
+	exit();
 }
 
-
-function println($s){
-	echo "{$s}\n";
-	// echo $s . "\n";
-}
+$commands[$command]['runs']();
 
 
-function showAvailableCommands(){
-	println("Available Commands:");
-	println("start: start the work");
-	println("stop: start the work");
-	println("stats: start the work");
-	println("clear: clears the work");
-}
 
 function startWork(){
 	global $data;
@@ -104,4 +104,16 @@ function saveToFile(){
 	global $data;
 	$text = implode("\n",$data);
 	file_put_contents('work.txt',$text);
+}
+
+function println($s){
+	echo "{$s}\n";
+}
+
+
+function showAvailableCommands(){
+	global $commands;
+	foreach($commands as  $commandName => $value){
+		println($commandName . ": " . $value['description']);
+	}
 }
