@@ -76,7 +76,7 @@ function stats(){
 		println("You started work but didn't stop yet");
 		$workTime = time() - $data[0];
 		println("You worked untill now for {$workTime} secs");
-		
+		exit();
 	}
 	$workTime = $data[1] - $data[0];
 	println("You worked {$workTime} secs");
@@ -110,7 +110,6 @@ function saveToFile(){
 function println($s){
 	echo "{$s}\n";
 }
-
 
 function showAvailableCommands(){
 	global $commands;
