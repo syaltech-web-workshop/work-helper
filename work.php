@@ -1,10 +1,5 @@
 <?php
 
-if(empty($argv[1])){
-	println("No command Specified");
-	showAvailableCommands();
-	exit();
-}
 $commands = [
 	'start'  => [
 		'description' => 'starts the work',
@@ -23,6 +18,12 @@ $commands = [
 		'runs' => 'clear'
 	]
 ];
+
+if(empty($argv[1])){
+    println("No command Specified");
+    showAvailableCommands();
+    exit();
+}
 
 $command = $argv[1];
 $data = [];
