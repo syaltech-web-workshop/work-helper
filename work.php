@@ -1,14 +1,15 @@
 <?php
 
+define('FILE_NAME','work.txt');
 
 $commands = [
 	'start'  => [
 		'description' => 'starts the work',
-		'runs' => 'startWork'
+		'runs' => 'start_work'
 	],
 	'stop' => [
 		'description' => 'stops the work',
-		'runs' => 'stopWork'
+		'runs' => 'stop_work'
 	],
 	'stats' => [
 		'description' => 'show the stats',
@@ -20,18 +21,18 @@ $commands = [
 	]
 ];
 
-$command = $argv[1];
-$data = [];
-
 if(empty($argv[1])){
     println("No command Specified");
-    showAvailableCommands();
+    show_available_commands();
     exit();
 }
 
+$command = $argv[1];
+$data = [];
+
 if(empty($commands[$command])){
 	println("Unsupported Command");
-	showAvailableCommands();
+	show_available_commands();
 	exit();
 }
 
@@ -39,21 +40,21 @@ $commands[$command]['runs']();
 
 
 
-function startWork(){
+function start_work(){
 	global $data;
-	checkFile();
+	check_file();
 	if(isset($data[0])){
 		println("You already started work");
 		exit();
 	}
 
 	$data[0] = time();
-	saveToFile();
+	save_to_file();
 }
 
-function stopWork(){
+function stop_work(){
 	global $data;
-	checkFile();
+	check_file();
 	if(empty($data[0])){
 		println("You didn't start work yet");
 		exit();
@@ -63,12 +64,12 @@ function stopWork(){
 		exit();
 	}
 	$data[1] = time();
-	saveToFile();
+	save_to_file();
 }
 
 function stats(){
 	global $data;
-	checkFile();
+	check_file();
 	if(empty($data[0])){
 		println("You didn't start work yet");
 		exit();
@@ -77,43 +78,42 @@ function stats(){
 		println("You started work but didn't stop yet");
 		$workTime = time() - $data[0];
 		println("You worked untill now for {$workTime} secs");
-		
+		exit();
 	}
 	$workTime = $data[1] - $data[0];
 	println("You worked {$workTime} secs");
 }
 
 function clear(){
-	file_put_contents('work.txt',null);
+	file_put_contents(FILE_NAME,null);
 }
 
-function checkFile(){
+function check_file(){
 	global $data;
-	if(file_exists('work.txt')){
-		$text = trim(file_get_contents('work.txt'));
+	if(file_exists(FILE_NAME)){
+		$text = trim(file_get_contents(FILE_NAME));
 		if(empty($text)){
 			$data = [];
 		}else{
 			$data = explode("\n",$text);
 		}
 	}else{
-		file_put_contents('work.txt',null);
+		file_put_contents(FILE_NAME,null);
 		$data = [];
 	}
 }
 
-function saveToFile(){
+function save_to_file(){
 	global $data;
 	$text = implode("\n",$data);
-	file_put_contents('work.txt',$text);
+	file_put_contents(FILE_NAME,$text);
 }
 
 function println($s){
 	echo "{$s}\n";
 }
 
-
-function showAvailableCommands(){
+function show_available_commands(){
 	global $commands;
 	foreach($commands as  $commandName => $value){
 		println($commandName . ": " . $value['description']);
