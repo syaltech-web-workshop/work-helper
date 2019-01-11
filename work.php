@@ -1,10 +1,6 @@
 <?php
 
-if(empty($argv[1])){
-	println("No command Specified");
-	showAvailableCommands();
-	exit();
-}
+
 $commands = [
 	'start'  => [
 		'description' => 'starts the work',
@@ -26,6 +22,12 @@ $commands = [
 
 $command = $argv[1];
 $data = [];
+
+if(empty($argv[1])){
+    println("No command Specified");
+    showAvailableCommands();
+    exit();
+}
 
 if(empty($commands[$command])){
 	println("Unsupported Command");
